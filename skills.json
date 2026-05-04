@@ -1,0 +1,22 @@
+[
+  {
+    "nombre": "Programación",
+    "descripción": "Habilidad para escribir y depurar código en varios lenguajes de programación.",
+    "número de agentes": 2
+  },
+  {
+    "nombre": "Análisis de datos",
+    "descripción": "Capacidad para procesar y analizar grandes conjuntos de datos.",
+    "número de agentes": 2
+  },
+  {
+    "nombre": "Diseño",
+    "descripción": "Habilidades creativas para diseñar interfaces y experiencias de usuario.",
+    "número de agentes": 2
+  },
+  {
+    "nombre": "Soporte",
+    "descripción": "Asistencia técnica y resolución de problemas para usuarios.",
+    "número de agentes": 1
+  }
+]

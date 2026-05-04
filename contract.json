@@ -1,0 +1,34 @@
+[
+  {
+    "cliente": "Juan Pérez",
+    "agente": "Agente Asistente",
+    "skills contratadas": ["Programación", "Análisis de datos"],
+    "fecha inicio": "2024-01-01",
+    "fecha fin": "2024-12-31",
+    "Monto": "5000€"
+  },
+  {
+    "cliente": "María García",
+    "agente": "Agente Diseñador",
+    "skills contratadas": ["Diseño"],
+    "fecha inicio": "2024-02-01",
+    "fecha fin": "2024-11-30",
+    "Monto": "3000€"
+  },
+  {
+    "cliente": "Carlos López",
+    "agente": "Agente Soporte",
+    "skills contratadas": ["Soporte", "Programación"],
+    "fecha inicio": "2024-03-01",
+    "fecha fin": "2024-09-30",
+    "Monto": "7000€"
+  },
+  {
+    "cliente": "Ana Rodríguez",
+    "agente": "Agente Analista",
+    "skills contratadas": ["Análisis de datos", "Diseño"],
+    "fecha inicio": "2024-04-01",
+    "fecha fin": "2024-10-31",
+    "Monto": "4000€"
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "nombre": "Juan Pérez",
+    "email": "juan.perez@example.com",
+    "plan": "gratuito",
+    "badge de estado": "activo"
+  },
+  {
+    "nombre": "María García",
+    "email": "maria.garcia@example.com",
+    "plan": "básico",
+    "badge de estado": "activo"
+  },
+  {
+    "nombre": "Carlos López",
+    "email": "carlos.lopez@example.com",
+    "plan": "premium",
+    "badge de estado": "inactivo"
+  },
+  {
+    "nombre": "Ana Rodríguez",
+    "email": "ana.rodriguez@example.com",
+    "plan": "gratuito",
+    "badge de estado": "activo"
+  },
+  {
+    "nombre": "Luis Martínez",
+    "email": "luis.martinez@example.com",
+    "plan": "básico",
+    "badge de estado": "inactivo"
+  }
+]

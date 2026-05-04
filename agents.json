@@ -1,0 +1,26 @@
+[
+  {
+    "nombre": "Agente Asistente",
+    "propietario": "Juan Pérez",
+    "badge de estado": "Activo",
+    "skills": ["Programación", "Análisis de datos"]
+  },
+  {
+    "nombre": "Agente Diseñador",
+    "propietario": "María García",
+    "badge de estado": "Activo",
+    "skills": ["Diseño"]
+  },
+  {
+    "nombre": "Agente Soporte",
+    "propietario": "Carlos López",
+    "badge de estado": "Inactivo",
+    "skills": ["Soporte", "Programación"]
+  },
+  {
+    "nombre": "Agente Analista",
+    "propietario": "Ana Rodríguez",
+    "badge de estado": "Fallando",
+    "skills": ["Análisis de datos", "Diseño"]
+  }
+]
