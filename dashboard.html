@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AgentHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        .dropdown-content { display: none; }
+        .dropdown-content.show { display: block; }
+        .modal { display: none; }
+        .modal.show { display: flex; }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+    <!-- Navbar Lateral -->
+    <nav class="fixed left-0 top-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg z-50">
+        <div class="p-4">
+            <h2 class="text-xl font-bold">AgentHub</h2>
+        </div>
+        <ul class="mt-4">
+            <li><a href="index.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Inicio</a></li>
+            <li><a href="dashboard.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Dashboard</a></li>
+            <li><a href="users.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Gestión de Usuarios</a></li>
+            <li><a href="agents.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Gestión de Agentes</a></li>
+            <li><a href="skills.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Skills</a></li>
+            <li><a href="contracts.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Contrataciones</a></li>
+            <li><a href="logs.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Log de Errores</a></li>
+        </ul>
+    </nav>
+
+    <!-- Header -->
+    <header class="fixed top-0 right-0 left-64 bg-white dark:bg-gray-800 shadow p-4 flex justify-between items-center z-40">
+        <div></div>
+        <div class="flex items-center space-x-4">
+            <button id="theme-toggle" class="p-2 rounded bg-gray-200 dark:bg-gray-700">🌙</button>
+            <img src="https://via.placeholder.com/40" alt="Logo AgentHub" class="cursor-pointer" onclick="window.location.href='index.html'">
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 mt-16 p-8">
+        <h1 class="text-3xl font-bold mb-8">Dashboard</h1>
+
+        <!-- Tarjetas Métricas -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white dark:bg-gray-800 p-4 rounded shadow">
+                <h3 class="text-lg font-semibold">Ingresos Totales</h3>
+                <p id="ingresos" class="text-2xl font-bold">0€</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 p-4 rounded shadow">
+                <h3 class="text-lg font-semibold">Pérdidas por Descuentos</h3>
+                <p class="text-2xl font-bold">0€</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 p-4 rounded shadow">
+                <h3 class="text-lg font-semibold">Agentes Activos</h3>
+                <p id="activos" class="text-2xl font-bold">0</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 p-4 rounded shadow">
+                <h3 class="text-lg font-semibold">Agentes Fallando</h3>
+                <p id="fallando" class="text-2xl font-bold">0</p>
+            </div>
+        </div>
+
+        <!-- Gráfico -->
+        <div class="bg-white dark:bg-gray-800 p-4 rounded shadow mb-8">
+            <h3 class="text-lg font-semibold mb-4">Actividad Semanal</h3>
+            <canvas id="chart"></canvas>
+        </div>
+
+        <!-- Botón PDF -->
+        <button id="download-pdf" class="bg-blue-500 text-white p-2 rounded">Descargar PDF del Reporte Semanal</button>
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        // Cargar datos y calcular métricas
+        async function loadDashboard() {
+            const contracts = await fetch('contract.json').then(r => r.json());
+            const agents = await fetch('agents.json').then(r => r.json());
+
+            const ingresos = contracts.reduce((sum, c) => sum + parseInt(c.Monto.replace('€', '')), 0);
+            document.getElementById('ingresos').textContent = ingresos + '€';
+
+            const activos = agents.filter(a => a['badge de estado'] === 'Activo').length;
+            document.getElementById('activos').textContent = activos;
+
+            const fallando = agents.filter(a => a['badge de estado'] === 'Fallando').length;
+            document.getElementById('fallando').textContent = fallando;
+
+            // Gráfico
+            const ctx = document.getElementById('chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+                    datasets: [{
+                        label: 'Actividad',
+                        data: [12, 19, 3, 5, 2, 3, 9],
+                        fill: true,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                }
+            });
+        }
+
+        // PDF
+        document.getElementById('download-pdf').addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text('Reporte Semanal AgentHub', 10, 10);
+            doc.text('Ingresos: ' + document.getElementById('ingresos').textContent, 10, 20);
+            doc.text('Agentes Activos: ' + document.getElementById('activos').textContent, 10, 30);
+            doc.save('reporte.pdf');
+        });
+
+        loadDashboard();
+    </script>
+</body>
+</html>

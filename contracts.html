@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrataciones - AgentHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        .dropdown-content { display: none; }
+        .dropdown-content.show { display: block; }
+        .modal { display: none; }
+        .modal.show { display: flex; }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+    <!-- Navbar Lateral -->
+    <nav class="fixed left-0 top-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg z-50">
+        <div class="p-4">
+            <h2 class="text-xl font-bold">AgentHub</h2>
+        </div>
+        <ul class="mt-4">
+            <li><a href="index.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Inicio</a></li>
+            <li><a href="dashboard.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Dashboard</a></li>
+            <li><a href="users.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Gestión de Usuarios</a></li>
+            <li><a href="agents.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Gestión de Agentes</a></li>
+            <li><a href="skills.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Skills</a></li>
+            <li><a href="contracts.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Contrataciones</a></li>
+            <li><a href="logs.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Log de Errores</a></li>
+        </ul>
+    </nav>
+
+    <!-- Header -->
+    <header class="fixed top-0 right-0 left-64 bg-white dark:bg-gray-800 shadow p-4 flex justify-between items-center z-40">
+        <div></div>
+        <div class="flex items-center space-x-4">
+            <button id="theme-toggle" class="p-2 rounded bg-gray-200 dark:bg-gray-700">🌙</button>
+            <img src="https://via.placeholder.com/40" alt="Logo AgentHub" class="cursor-pointer" onclick="window.location.href='index.html'">
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 mt-16 p-8">
+        <h1 class="text-3xl font-bold mb-8">Contrataciones de Agentes</h1>
+        <table class="w-full bg-white dark:bg-gray-800 rounded shadow">
+            <thead>
+                <tr class="border-b">
+                    <th class="p-4 text-left">Cliente</th>
+                    <th class="p-4 text-left">Agente</th>
+                    <th class="p-4 text-left">Skills</th>
+                    <th class="p-4 text-left">Fecha Inicio</th>
+                    <th class="p-4 text-left">Fecha Fin</th>
+                    <th class="p-4 text-left">Monto</th>
+                    <th class="p-4 text-left">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="contracts-table"></tbody>
+        </table>
+    </main>
+
+    <!-- Modal -->
+    <div id="contract-modal" class="modal fixed inset-0 bg-black bg-opacity-50 justify-center items-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded shadow max-w-lg w-full mx-4">
+            <h2 class="text-xl font-bold mb-4">Detalle del Contrato</h2>
+            <div id="contract-details"></div>
+            <button class="mt-4 bg-red-500 text-white p-2 rounded" onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        async function loadContracts() {
+            const contracts = await fetch('contract.json').then(r => r.json());
+            const tbody = document.getElementById('contracts-table');
+            contracts.forEach(contract => {
+                const row = document.createElement('tr');
+                row.className = 'border-b';
+                row.innerHTML = `
+                    <td class="p-4">${contract.cliente}</td>
+                    <td class="p-4">${contract.agente}</td>
+                    <td class="p-4">${contract['skills contratadas'].join(', ')}</td>
+                    <td class="p-4">${contract['fecha inicio']}</td>
+                    <td class="p-4">${contract['fecha fin']}</td>
+                    <td class="p-4">${contract.Monto}</td>
+                    <td class="p-4 relative">
+                        <button class="dropdown-btn">...</button>
+                        <div class="dropdown-content absolute right-0 bg-white dark:bg-gray-700 shadow rounded">
+                            <button onclick="viewContract(${JSON.stringify(contract).replace(/"/g, '&quot;')})">Ver detalle</button>
+                        </div>
+                        <button onclick="downloadContract(${JSON.stringify(contract).replace(/"/g, '&quot;')})" class="ml-2 bg-green-500 text-white p-1 rounded">PDF</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function viewContract(contract) {
+            document.getElementById('contract-details').innerHTML = `
+                <p><strong>Cliente:</strong> ${contract.cliente}</p>
+                <p><strong>Agente:</strong> ${contract.agente}</p>
+                <p><strong>Skills:</strong> ${contract['skills contratadas'].join(', ')}</p>
+                <p><strong>Fecha Inicio:</strong> ${contract['fecha inicio']}</p>
+                <p><strong>Fecha Fin:</strong> ${contract['fecha fin']}</p>
+                <p><strong>Monto:</strong> ${contract.Monto}</p>
+            `;
+            document.getElementById('contract-modal').classList.add('show');
+        }
+
+        function downloadContract(contract) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text('Contrato AgentHub', 10, 10);
+            doc.text(`Cliente: ${contract.cliente}`, 10, 20);
+            doc.text(`Agente: ${contract.agente}`, 10, 30);
+            doc.text(`Skills: ${contract['skills contratadas'].join(', ')}`, 10, 40);
+            doc.text(`Monto: ${contract.Monto}`, 10, 50);
+            doc.save('contrato.pdf');
+        }
+
+        function closeModal() {
+            document.getElementById('contract-modal').classList.remove('show');
+        }
+
+        loadContracts();
+    </script>
+</body>
+</html>

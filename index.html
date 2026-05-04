@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentHub - Plataforma de Agentes IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        .dropdown-content {
+            display: none;
+        }
+        .dropdown-content.show {
+            display: block;
+        }
+        .modal {
+            display: none;
+        }
+        .modal.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+    <!-- Navbar Lateral -->
+    <nav class="fixed left-0 top-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg z-50">
+        <div class="p-4">
+            <h2 class="text-xl font-bold">AgentHub</h2>
+        </div>
+        <ul class="mt-4">
+            <li><a href="index.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Inicio</a></li>
+            <li><a href="dashboard.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Dashboard</a></li>
+            <li><a href="users.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Gestión de Usuarios</a></li>
+            <li><a href="agents.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Gestión de Agentes</a></li>
+            <li><a href="skills.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Skills</a></li>
+            <li><a href="contracts.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Contrataciones</a></li>
+            <li><a href="logs.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Log de Errores</a></li>
+        </ul>
+    </nav>
+
+    <!-- Header -->
+    <header class="fixed top-0 right-0 left-64 bg-white dark:bg-gray-800 shadow p-4 flex justify-between items-center z-40">
+        <div></div>
+        <div class="flex items-center space-x-4">
+            <button id="theme-toggle" class="p-2 rounded bg-gray-200 dark:bg-gray-700">🌙</button>
+            <img src="https://via.placeholder.com/40" alt="Logo AgentHub" class="cursor-pointer" onclick="window.location.href='index.html'">
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 mt-16 p-8">
+        <!-- Hero Section -->
+        <section class="hero bg-gradient-to-r from-blue-500 to-purple-600 text-white p-12 rounded-lg mb-8">
+            <h1 class="text-4xl font-bold mb-4">Bienvenido a AgentHub</h1>
+            <p class="text-xl">La plataforma SaaS para alquilar agentes de IA personalizados con skills específicas para tus necesidades de negocio.</p>
+        </section>
+
+        <!-- Secciones -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">¿Qué es AgentHub?</h2>
+            <p>AgentHub es una startup innovadora que ofrece una plataforma donde las empresas pueden alquilar agentes de IA preconfigurados. Estos agentes pueden equiparse con diversas skills como navegación web, lectura de documentos o gestión de calendarios, y desplegarse para tareas específicas.</p>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">Beneficios</h2>
+            <ul class="list-disc list-inside">
+                <li>Agentes personalizables con skills a medida.</li>
+                <li>Despliegue rápido y eficiente.</li>
+                <li>Soporte continuo y actualizaciones.</li>
+            </ul>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">Nuestro Equipo</h2>
+            <p>Contamos con un equipo de expertos en IA y desarrollo de software dedicados a proporcionar soluciones de vanguardia.</p>
+        </section>
+
+        <!-- Contacto -->
+        <section class="contact bg-gray-200 dark:bg-gray-700 p-8 rounded-lg">
+            <h2 class="text-2xl font-bold mb-4">Contacto</h2>
+            <form>
+                <div class="mb-4">
+                    <label for="name" class="block">Nombre</label>
+                    <input type="text" id="name" class="w-full p-2 border rounded">
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block">Email</label>
+                    <input type="email" id="email" class="w-full p-2 border rounded">
+                </div>
+                <div class="mb-4">
+                    <label for="message" class="block">Mensaje</label>
+                    <textarea id="message" class="w-full p-2 border rounded"></textarea>
+                </div>
+                <button type="submit" class="bg-blue-500 text-white p-2 rounded">Enviar</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

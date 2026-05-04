@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - AgentHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        .dropdown-content { display: none; }
+        .dropdown-content.show { display: block; }
+        .modal { display: none; }
+        .modal.show { display: flex; }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+    <!-- Navbar Lateral -->
+    <nav class="fixed left-0 top-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg z-50">
+        <div class="p-4">
+            <h2 class="text-xl font-bold">AgentHub</h2>
+        </div>
+        <ul class="mt-4">
+            <li><a href="index.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Inicio</a></li>
+            <li><a href="dashboard.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Dashboard</a></li>
+            <li><a href="users.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Gestión de Usuarios</a></li>
+            <li><a href="agents.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Gestión de Agentes</a></li>
+            <li><a href="skills.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Skills</a></li>
+            <li><a href="contracts.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Contrataciones</a></li>
+            <li><a href="logs.html" class="block p-4 hover:bg-gray-200 dark:hover:bg-gray-700">Log de Errores</a></li>
+        </ul>
+    </nav>
+
+    <!-- Header -->
+    <header class="fixed top-0 right-0 left-64 bg-white dark:bg-gray-800 shadow p-4 flex justify-between items-center z-40">
+        <div></div>
+        <div class="flex items-center space-x-4">
+            <button id="theme-toggle" class="p-2 rounded bg-gray-200 dark:bg-gray-700">🌙</button>
+            <img src="https://via.placeholder.com/40" alt="Logo AgentHub" class="cursor-pointer" onclick="window.location.href='index.html'">
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="ml-64 mt-16 p-8">
+        <h1 class="text-3xl font-bold mb-8">Gestión de Usuarios</h1>
+        <table class="w-full bg-white dark:bg-gray-800 rounded shadow">
+            <thead>
+                <tr class="border-b">
+                    <th class="p-4 text-left">Nombre</th>
+                    <th class="p-4 text-left">Email</th>
+                    <th class="p-4 text-left">Plan</th>
+                    <th class="p-4 text-left">Estado</th>
+                    <th class="p-4 text-left">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="users-table"></tbody>
+        </table>
+    </main>
+
+    <!-- Modal -->
+    <div id="user-modal" class="modal fixed inset-0 bg-black bg-opacity-50 justify-center items-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded shadow max-w-md w-full mx-4">
+            <h2 class="text-xl font-bold mb-4">Detalle de Usuario</h2>
+            <div id="user-details"></div>
+            <button class="mt-4 bg-red-500 text-white p-2 rounded" onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        async function loadUsers() {
+            const users = await fetch('users.json').then(r => r.json());
+            const tbody = document.getElementById('users-table');
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.className = 'border-b';
+                row.innerHTML = `
+                    <td class="p-4">${user.nombre}</td>
+                    <td class="p-4">${user.email}</td>
+                    <td class="p-4">${user.plan}</td>
+                    <td class="p-4">${user['badge de estado']}</td>
+                    <td class="p-4 relative">
+                        <button class="dropdown-btn">...</button>
+                        <div class="dropdown-content absolute right-0 bg-white dark:bg-gray-700 shadow rounded">
+                            <button onclick="viewUser('${user.nombre}', '${user.email}', '${user.plan}', '${user['badge de estado']}')">Ver detalle</button>
+                            <button onclick="deleteUser('${user.nombre}')">Eliminar</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function viewUser(nombre, email, plan, estado) {
+            document.getElementById('user-details').innerHTML = `
+                <p><strong>Nombre:</strong> ${nombre}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Plan:</strong> ${plan}</p>
+                <p><strong>Estado:</strong> ${estado}</p>
+            `;
+            document.getElementById('user-modal').classList.add('show');
+        }
+
+        function deleteUser(nombre) {
+            alert(`Eliminar usuario: ${nombre}`);
+        }
+
+        function closeModal() {
+            document.getElementById('user-modal').classList.remove('show');
+        }
+
+        loadUsers();
+    </script>
+</body>
+</html>
